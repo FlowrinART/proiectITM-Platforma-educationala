@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Statistici Curs</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Statistici Curs</h2>
+
+    <p>ID Curs: <span th:text="${courseId}"></span></p>
+
+    <h3>General</h3>
+
+    <p>Numar studenti: <span th:text="${studentCount}"></span></p>
+    <p>Total token-uri ramase: <span th:text="${totalTokens}"></span></p>
+    <p>Total cereri ajutor ramase: <span th:text="${totalHelp}"></span></p>
+
+    <h3>Medii</h3>
+
+    <p>Medie token-uri per student: <span th:text="${avgTokens}"></span></p>
+    <p>Medie cereri ajutor per student: <span th:text="${avgHelp}"></span></p>
+
+    <br>
+    <a href="/admin">Inapoi la admin</a>
+</div>
+
+</body>
+</html>

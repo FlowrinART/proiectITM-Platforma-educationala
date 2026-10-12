@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="container login-box">
+
+    <h2>Login</h2>
+
+    <p style="color:red" th:if="${errorMessage}" th:text="${errorMessage}"></p>
+
+    <form action="/login" method="post">
+
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Parola" required>
+
+        <button type="submit">Login</button>
+
+    </form>
+
+    <div class="links">
+        <a href="/register">Nu ai cont? Inregistrare</a>
+        <a href="/reset-password">Ai uitat parola?</a>
+    </div>
+
+</div>
+
+</body>
+</html>

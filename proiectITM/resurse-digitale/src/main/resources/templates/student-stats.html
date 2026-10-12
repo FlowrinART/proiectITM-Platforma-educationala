@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Statistici Student</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="container">
+
+
+
+    <h2>Statistici Student</h2>
+
+    <p>ID Student: <span th:text="${studentId}"></span></p>
+
+    <h3>Resurse pe curs</h3>
+
+    <table th:if="${resources.size() > 0}">
+        <tr>
+            <th>ID Curs</th>
+            <th>Token-uri ramase</th>
+            <th>Cereri ajutor ramase</th>
+        </tr>
+
+        <tr th:each="r : ${resources}">
+            <td th:text="${r.courseId}"></td>
+            <td th:text="${r.remainingTokens}"></td>
+            <td th:text="${r.remainingSubscriptions}"></td>
+        </tr>
+    </table>
+
+    <p th:if="${resources.size() == 0}">
+        Studentul nu are resurse alocate.
+    </p>
+    <p th:if="${usages.size() == 0}">
+        Nu exista activitati inregistrate.
+    </p>
+
+    <h3>Token-uri folosite pe activitati</h3>
+
+
+    <table th:if="${usages.size() > 0}">
+        <tr>
+            <th>Activitate</th>
+            <th>Token-uri folosite</th>
+        </tr>
+
+        <tr th:each="u : ${usages}">
+            <td th:text="${u.activity}"></td>
+            <td th:text="${u.tokensUsed}"></td>
+        </tr>
+    </table>
+
+    <h3>Total</h3>
+
+    <p>Token-uri alocate: <span th:text="${allocatedTokens}"></span></p>
+    <p>Token-uri ramase: <span th:text="${remainingTokens}"></span></p>
+    <p>Token-uri folosite: <span th:text="${usedTokens}"></span></p>
+
+    <p>Abonamente alocate: <span th:text="${allocatedSubscriptions}"></span></p>
+    <p>Abonamente utilizate: <span th:text="${usedSubscriptions}"></span></p>
+    <br>
+    <a href="/admin">Inapoi la admin</a>
+</div>
+
+</body>
+</html>

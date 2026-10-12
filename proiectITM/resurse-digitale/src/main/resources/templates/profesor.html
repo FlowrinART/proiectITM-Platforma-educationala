@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Profesor</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="container">
+    <p th:if="${session.successMessage}" style="color:green;">
+        <span th:text="${session.successMessage}"></span>
+    </p>
+
+    <p th:if="${session.studentErrorMessage}" style="color:red;">
+        <span th:text="${session.studentErrorMessage}"></span>
+    </p>
+    <h2>Pagina Profesor</h2>
+
+    <!-- 🔹 CURSURILE PROFESORULUI -->
+    <h3>Cursurile mele</h3>
+
+    <ul>
+        <li th:each="course : ${courses}">
+            <span th:text="${course.name}"></span>
+        </li>
+    </ul>
+
+    <!-- 🔹 UPLOAD MATERIALE -->
+    <h3>Incarca material</h3>
+
+    <form action="/profesor/upload-material" method="post" enctype="multipart/form-data">
+        <select name="courseId" required>
+            <option value="">Alege curs</option>
+            <option th:each="course : ${courses}"
+                    th:value="${course.id}"
+                    th:text="${course.name}">
+            </option>
+        </select>
+
+        <br><br>
+
+        <input type="text" name="title" placeholder="Titlu material" required>
+
+        <br><br>
+
+        <input type="file" name="file" required>
+
+        <br><br>
+
+        <button type="submit">Incarca material</button>
+    </form>
+
+    <!-- 🔹 TEME STUDENTI -->
+    <h3>Teme incarcate de studenti</h3>
+
+    <table border="1" th:if="${homeworks.size() > 0}">
+        <tr>
+            <th>ID Student</th>
+            <th>ID Curs</th>
+            <th>Fisier</th>
+        </tr>
+
+        <tr th:each="hw : ${homeworks}">
+            <td th:text="${hw.studentId}"></td>
+            <td th:text="${hw.courseId}"></td>
+            <td>
+                <a th:href="@{'/homework/' + ${hw.fileName}}" target="_blank">
+                    Deschide tema
+                </a>
+            </td>
+        </tr>
+    </table>
+
+    <h3>Cereri resurse suplimentare</h3>
+
+    <table th:if="${requests.size() > 0}">
+        <tr>
+            <th>ID Student</th>
+            <th>ID Curs</th>
+            <th>Token-uri cerute</th>
+            <th>Cereri ajutor</th>
+            <th>Actiune</th>
+        </tr>
+
+        <tr th:each="req : ${requests}">
+            <td th:text="${req.studentId}"></td>
+            <td th:text="${req.courseId}"></td>
+
+            <!-- 🔥 ASTEA LIPSEAU -->
+            <td th:text="${req.requestedTokens}"></td>
+            <td th:text="${req.requestedHelpRequests}"></td>
+
+            <td>
+                <form action="/profesor/approve-request" method="post">
+                    <input type="hidden" name="requestId" th:value="${req.id}">
+                    <button type="submit">Aproba cererea</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+    <h3>Cere token-uri suplimentare</h3>
+
+    <form action="/profesor/request-resources" method="post">
+        <input type="number" name="tokens" placeholder="Token-uri cerute" required>
+        <button type="submit">Trimite cerere</button>
+    </form>
+    <h3>Token-uri disponibile</h3>
+
+    <div th:if="${profResource != null}">
+        <p>Token-uri: <span th:text="${profResource.tokens}"></span></p>
+    </div>
+
+    <p th:if="${profResource == null}">
+        Nu ai token-uri alocate.
+    </p>
+
+    <p th:if="${requests.size() == 0}">
+        Nu exista cereri de resurse.
+    </p>
+
+    <p th:if="${homeworks.size() == 0}">
+        Nu exista teme incarcate.
+    </p>
+
+    <br>
+    <h3>Creeaza curs</h3>
+
+    <form action="/profesor/create-course" method="post">
+
+        <input type="text" name="name" placeholder="Nume curs" required>
+        <br><br>
+
+        <input type="text" name="description" placeholder="Descriere" required>
+        <br><br>
+
+        <input type="number" name="maxStudents" placeholder="Nr maxim studenti" required>
+        <br><br>
+
+        <input type="number" name="tokensPerStudent" placeholder="Token-uri per student" required>
+        <br><br>
+
+        <input type="number" name="subscriptionsPerStudent" placeholder="Abonamente per student" required>
+        <br><br>
+
+        <button type="submit">Creeaza curs</button>
+    </form>
+
+    <a href="/login">Logout</a>
+
+
+</div>
+
+</body>
+</html>

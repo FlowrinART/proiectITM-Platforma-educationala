@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Student</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="container">
+
+    <h2>Pagina Student</h2>
+
+    <h3>Cursuri disponibile</h3>
+
+    <table th:if="${availableCourses.size() > 0}">
+        <tr>
+            <th>Nume curs</th>
+            <th>Descriere</th>
+            <th>Locuri maxime</th>
+            <th>Actiune</th>
+        </tr>
+
+        <tr th:each="course : ${availableCourses}">
+            <td th:text="${course.name}"></td>
+            <td th:text="${course.description}"></td>
+            <td th:text="${course.maxStudents}"></td>
+            <td>
+                <form action="/student/enroll-form" method="get">
+                    <input type="hidden" name="courseId" th:value="${course.id}">
+                    <button type="submit">Inroleaza-te</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+
+    <p th:if="${availableCourses.size() == 0}">
+        Nu există cursuri disponibile
+    </p>
+
+    <br><br>
+
+    <h3>Cursurile mele</h3>
+
+    <table th:if="${enrolledCourses.size() > 0}">
+        <tr>
+            <th>Nume curs</th>
+            <th>Descriere</th>
+            <th>Pagina curs</th>
+            <th>Actiune</th>
+        </tr>
+
+        <tr th:each="course : ${enrolledCourses}">
+            <td th:text="${course.name}"></td>
+            <td th:text="${course.description}"></td>
+
+            <td>
+                <a th:href="@{/student/course/{id}(id=${course.id})}">
+                    Intra in curs
+                </a>
+            </td>
+
+            <td>
+                <form action="/student/unenroll" method="post">
+                    <input type="hidden" name="courseId" th:value="${course.id}">
+                    <button type="submit">Dezinscrie-te</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+
+    <p th:if="${enrolledCourses.size() == 0}">
+        Nu esti inscris la niciun curs
+    </p>
+
+    <p th:if="${session.studentErrorMessage}" style="color:red;">
+        <span th:text="${session.studentErrorMessage}"></span>
+    </p>
+    <p>Token-uri alocate: <span th:text="${allocatedTokens}"></span></p>
+    <p>Token-uri folosite: <span th:text="${usedTokens}"></span></p>
+
+    <p>Abonamente alocate: <span th:text="${allocatedSubscriptions}"></span></p>
+    <p>Abonamente utilizate: <span th:text="${usedSubscriptions}"></span></p>
+
+    <br>
+    <a href="/login">Logout</a>
+
+
+</div>
+</body>
+</html>

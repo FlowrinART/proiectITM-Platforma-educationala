@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Statistici Universitate</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Statistici Universitate</h2>
+
+    <h3>General</h3>
+
+    <p>Total studenti: <span th:text="${totalStudents}"></span></p>
+    <p>Total cursuri: <span th:text="${totalCourses}"></span></p>
+    <p>Total inscrieri: <span th:text="${totalEnrollments}"></span></p>
+
+    <h3>Resurse totale</h3>
+
+    <p>Total token-uri ramase: <span th:text="${totalTokensRemaining}"></span></p>
+    <p>Total cereri ajutor ramase: <span th:text="${totalHelpRemaining}"></span></p>
+
+    <br>
+    <a href="/admin">Inapoi la admin</a>
+</div>
+
+</body>
+</html>

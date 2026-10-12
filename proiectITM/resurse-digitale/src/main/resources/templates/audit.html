@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Audit</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Pagina Audit</h2>
+
+    <h3>Jurnal acțiuni utilizatori</h3>
+
+    <table border="1" th:if="${logs.size() > 0}">
+        <tr>
+            <th>ID User</th>
+            <th>Rol</th>
+            <th>Acțiune</th>
+            <th>Detalii</th>
+            <th>Data</th>
+        </tr>
+
+        <tr th:each="log : ${logs}">
+            <td th:text="${log.userId}"></td>
+            <td th:text="${log.userRole}"></td>
+            <td th:text="${log.action}"></td>
+            <td th:text="${log.details}"></td>
+            <td th:text="${log.timestamp}"></td>
+        </tr>
+    </table>
+
+    <p th:if="${logs.size() == 0}">
+        Nu există acțiuni jurnalizate.
+    </p>
+
+    <br>
+    <a href="/login">Logout</a>
+</div>
+
+</body>
+</html>

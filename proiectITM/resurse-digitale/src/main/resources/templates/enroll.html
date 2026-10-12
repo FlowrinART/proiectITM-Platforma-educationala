@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inrolare curs</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="container">
+
+<h2>Formular Inrolare</h2>
+
+<form action="/student/enroll" method="post">
+
+    <input type="hidden" name="courseId" th:value="${courseId}">
+
+    <input type="text" name="firstName" placeholder="Prenume" required><br><br>
+    <input type="text" name="lastName" placeholder="Nume" required><br><br>
+    <input type="text" name="year" placeholder="An" required><br><br>
+    <input type="text" name="group" placeholder="Grupa" required><br><br>
+    <input type="text" name="specialization" placeholder="Specializare" required><br><br>
+
+    <button type="submit">Trimite</button>
+</form>
+</div>
+</body>
+</html>

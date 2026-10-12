@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Curs</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h2 th:text="${course.name}"></h2>
+    <p th:text="${course.description}"></p>
+
+    <h3>Resurse disponibile</h3>
+
+    <div th:if="${resources != null}">
+        <p>Token-uri ramase: <span th:text="${resources.remainingTokens}"></span></p>
+        <p>Cereri ajutor ramase: <span th:text="${resources.remainingSubscriptions}"></span></p>
+    </div>
+
+    <p th:if="${resources == null}">
+        Nu exista resurse alocate pentru acest curs.
+    </p>
+
+    <form action="/student/use-subscription" method="post"
+          th:if="${resources != null && resources.remainingSubscriptions > 0}">
+        <input type="hidden" name="courseId" th:value="${course.id}">
+        <button type="submit">Foloseste o cerere de ajutor</button>
+    </form>
+
+    <p th:if="${resources != null && resources.remainingSubscriptions == 0}" style="color:red">
+        Nu mai ai cereri de ajutor disponibile!
+    </p>
+
+    <h3>Activitati AI</h3>
+
+    <form action="/student/use-tokens" method="post">
+        <input type="hidden" name="courseId" th:value="${course.id}">
+
+        <select name="activity" required>
+            <option value="">Alege activitate</option>
+            <option value="summary">Rezumat text (10)</option>
+            <option value="image">Generare imagine (50)</option>
+            <option value="code">Asistenta cod (5000)</option>
+            <option value="translate">Traducere text (20)</option>
+            <option value="chat">Chat AI (15)</option>
+            <option value="analysis">Analiza document (30)</option>
+            <option value="presentation">Generare prezentare (100)</option>
+            <option value="quiz">Generare quiz (25)</option>
+            <option value="debug">Debug cod (40)</option>
+            <option value="essay">Scriere eseu (60)</option>
+        </select>
+
+        <br><br>
+
+        <button type="submit">Executa</button>
+    </form>
+
+    <h3>Materiale curs</h3>
+
+    <table th:if="${materials.size() > 0}">
+        <tr>
+            <th>Titlu</th>
+            <th>Fisier</th>
+        </tr>
+
+        <tr th:each="material : ${materials}">
+            <td th:text="${material.title}"></td>
+            <td>
+                <a th:href="@{'/files/' + ${material.fileName}}" target="_blank">
+                    Deschide / descarca PDF
+                </a>
+            </td>
+        </tr>
+    </table>
+
+    <p th:if="${materials.size() == 0}">
+        Nu exista materiale incarcate pentru acest curs.
+    </p>
+
+    <h3>Cere resurse suplimentare</h3>
+
+    <form action="/student/request-resources" method="post">
+        <input type="hidden" name="courseId" th:value="${course.id}">
+
+        <input type="number" name="tokens" placeholder="Token-uri cerute" min="0" value="0">
+
+        <input type="number" name="helpRequests" placeholder="Cereri ajutor cerute (max 2)" min="0" max="2" value="0">
+
+        <button type="submit">Trimite cerere</button>
+    </form>
+
+    <h3>Incarca tema</h3>
+
+    <form action="/student/upload-homework" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="courseId" th:value="${course.id}">
+        <input type="file" name="file" required>
+        <button type="submit">Incarca tema</button>
+    </form>
+
+    <h3>Credențiale abonament</h3>
+
+    <p style="font-size: 14px; color: gray;">
+        Aceste credențiale sunt furnizate de administrator pentru acces la servicii externe.
+    </p>
+
+    <p th:if="${successMessage}" style="color:green;">
+        <span th:text="${successMessage}"></span>
+    </p>
+
+    <p th:if="${studentErrorMessage}" style="color:red;">
+        <span th:text="${studentErrorMessage}"></span>
+    </p>
+
+    <div th:if="${credentials.size() > 0}">
+        <div th:each="c : ${credentials}">
+            <p>Username: <span th:text="${c.username}"></span></p>
+            <p>Password: <span th:text="${c.password}"></span></p>
+
+            <form th:if="${resources != null && !resources.subscriptionValidated}"
+                  action="/student/validate-subscription"
+                  method="post">
+                <input type="hidden" name="courseId" th:value="${course.id}">
+                <input type="hidden" name="username" th:value="${c.username}">
+                <input type="hidden" name="password" th:value="${c.password}">
+                <button type="submit">Valideaza abonament</button>
+            </form>
+
+            <p th:if="${resources != null && resources.subscriptionValidated}" style="color:green;">
+                Abonament deja validat ✔
+            </p>
+        </div>
+    </div>
+
+    <p th:if="${credentials.size() == 0}">
+        Nu ai credențiale disponibile.
+    </p>
+
+    <br>
+    <a href="/student">Inapoi la pagina student</a>
+
+</div>
+
+</body>
+</html>
